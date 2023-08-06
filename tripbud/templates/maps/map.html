@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% load static %}
+
+<script src="http://maps.googleapis.com/maps/api/js?key={{key}}&callback=console.debug&libraries=maps,marker,places&v=beta"></script>
+
+
+<style>
+    #map {
+        height: 500px;
+        width: 50%;
+    }
+    .mainwrapper{
+        height: 100%;
+        width: 95%;
+    }
+    #mapwrap{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    #markerslist{
+        width: 50%;
+        height: 500px;
+        overflow-y: scroll;
+        background: rgba(255, 255, 255, 0.302);
+    }
+</style>
+
+<div class="mainwrapper m-auto">
+    <br><br><br>
+    <div id="mapwrap" >
+
+        <div id="map" ></div>
+        <table id="markerslist" class="table">
+            <h2>Markers</h2>
+        </table>
+    </div>
+        
+    <br>
+    <div class="buttonsarray">
+
+        <div id="floating-panel">
+            <input type="button" id="show-markers" value="Show Markers">
+            <input type="button" id="clear-markers" value="Hide Markers">
+            <input type="button" id="delete-markers" value="Delete Markers">
+        </div>
+        <br>
+        <button id = "pan-to-current-location" class="btn btn-primary">Pan to Current Location</button>
+        <input type="text" id="searchTextField">
+        <button onclick='finder()' id="search-location" class="btn btn-primary">Search</button>
+    </div>
+    
+</div>
+
+
+<script type="text/javascript" async src="{% static '/maps/maps.js' %}" onload="initMap()"></script>
+
+{% endblock %}
+```
