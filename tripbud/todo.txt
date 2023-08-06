@@ -1,0 +1,2 @@
+pipe the lan and lng variables in map.html more securely
+

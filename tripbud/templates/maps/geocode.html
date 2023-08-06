@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %} <h2> Geocoding </h2>{% endblock %}
+{% block content %}
+<div class="pageholder">
+    <div class="titleholder"> 
+        <div class="title"><i class="fas fa-compass mr-2"></i> Google       Maps #1: Geocoding </div>
+    </div>
+
+    <div class="linkholder">
+        {{result}}
+    </div>
+    <div class="linkholder">
+        latitude = {{lat}}
+    </div>
+    <div class="linkholder">
+        longitude = {{lng}}
+    </div>
+    <div class="linkholder">
+        elevation = {{elev}}
+    </div>
+
+</div>
+{% endblock %}

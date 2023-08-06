@@ -1,0 +1,150 @@
+<style>
+    #signup{
+    position:relative;
+    padding: 15px 32px;
+    outline:none;
+    border: none;
+    box-shadow: none;
+    background-image: 
+    linear-gradient(#f1eded, #b6f3c4), 
+    linear-gradient(#e1eadf, #b8ded3), 
+    linear-gradient(#7bece5, #d0dde6), 
+    linear-gradient(#c8d0ed, #e8d8d8cb);
+    
+    background-position: 0 0, 0 0, 0 100%, 0 100%;
+    background-size: 3px 0%, 0% 3px, 0% 3px, 3px 0%;
+    background-color: #79d2b763;
+    background-repeat:no-repeat;
+    transition:0.2s linear;
+    }
+    #signup:before {
+    content:"";
+    position:absolute;
+    z-index:-1;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    border:3px solid #60daaa;
+    }
+
+    #signup:hover {
+    background-position: 0 100%, 0 0, 0 100%, 100% 0;
+    background-size: 3px 0%, 100% 3px, 0% 3px,3px 0%;
+    animation: animate 1.4s linear infinite 0.2s;
+    }
+
+    @keyframes animate {
+    0% {
+    background-position: 0 100%, 0 0, 0 100%, 100% 0;
+    background-size: 3px 0%, 100% 3px, 0% 3px,3px 0%;
+    }
+    40% {
+    background-position: 0 100%, 100% 0, 100% 100%, 100% 0;
+    background-size: 3px 0%, 100% 3px, 0% 3px,3px 100%;
+    }
+    60% {
+    background-position: 0 100%, 100% 0, 100% 100%, 100% 100%;
+    background-size: 3px 0%, 0% 3px, 100% 3px,3px 100%
+    }
+    70% {
+    background-position: 0 100%, 100% 0, 0% 100%, 100% 100%;
+    background-size: 3px 100%, 0% 3px, 100% 3px,3px 0%;
+    }
+    80% {
+    background-position: 0% 0%, 0% 0, 0% 100%, 100% 100%;
+    background-size: 3px 100%, 0% 3px, 0% 3px,3px 0%;
+    }
+    100% {
+    background-position: 0% 0%, 0 0, 0 100%, 100% 100%;
+    background-size: 3px 0%, 100% 3px, 0% 3px,3px 0%  
+    }
+    }
+    .pagewrap{
+        max-width: 85%;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-auto-rows: 1fr;
+        grid-column-gap: 30px;
+        grid-row-gap: 30px;
+    }
+    #mapface{
+        /* height: 50%; */
+        border-bottom-right-radius: 20px;
+        filter: sepia(17%) drop-shadow(0 0 15px rgba(0, 0, 0, 0.5)) contrast(1.2);
+        max-width: 100%;
+        margin:auto;
+
+}
+    
+    .picframe{
+        display: flex;
+    }
+    .formwrap p label{
+        display: inline-block;
+        width: 100px;
+        text-align: center;
+        /* margin-right: 10px; */
+    }
+    .formwrap ul{
+        display: none;
+    }
+    .formwrap p span{
+        display: none;
+    }
+    .formwrap p input{
+        text-align: center;
+    }
+    .formwrap{
+        /* height: 75%; */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin : 0 auto;
+        padding: 10px;
+        border: 2px solid rgba(160, 203, 205, 0.429);
+        border-top-left-radius: 20px;
+        border-bottom-right-radius: 12px;
+        background: linear-gradient(45deg, azure, aliceblue);
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+    }
+    .formwrap.htmx-swappping {
+
+        background: linear-gradient(45deg, rgb(116, 208, 182), rgb(116, 208, 182));
+        transition: background 1s;
+    }
+</style>
+{% extends "base.html" %} 
+{% load static %} 
+{% block title %} Sign Up {% endblock %}
+{% block content%}
+<div class="mainwrapper m-auto">
+        <br><br><br>
+    <div class="pagewrap m-auto">
+        
+        <div class="formwrap">
+                <h2> Sign Up </h2> 
+                <br>
+                <form action="" name="signup" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p  }}
+                    <button 
+                        id="signup"
+                        class="btn text-success"
+                        type="submit"
+                        hx-swap="outerHTML swap:1s" 
+                        hx-target=".formwrap">
+                        Sign Up
+                    </button>
+                </form>
+            </div>
+        
+        <div class="picframe">
+                <img id='mapface' src="{% static 'images/tripbud.jpg' %}" alt="tripbud">
+            </div>
+    
+        </div>
+</div>
+
+{% endblock %}
