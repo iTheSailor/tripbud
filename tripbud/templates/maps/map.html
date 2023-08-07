@@ -16,25 +16,35 @@
         width: 95%;
     }
     #mapwrap{
+        width: 85%;
+        margin: auto;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
     }
     #markerslist{
-        width: 50%;
+        width: 40%;
         height: 500px;
         overflow-y: scroll;
         background: rgba(255, 255, 255, 0.302);
     }
 </style>
 
-<div class="mainwrapper m-auto">
+<div class="mainwrapper m-auto~">
     <br><br><br>
-    <div id="mapwrap" >
+    <div id="mapwrap">
 
         <div id="map" ></div>
         <table id="markerslist" class="table">
-            <h2>Markers</h2>
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Latitude</th>
+                    <th scope="col">Longitude</th>
+                </tr>
+            </thead>
+            <tbody id="markerslistbody">
+            </tbody>
         </table>
     </div>
         
