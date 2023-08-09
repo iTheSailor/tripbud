@@ -8,19 +8,21 @@ from django.contrib import messages
 
 # Create your views here.
 
+#signup view
 class RegisterationForm(generic.CreateView):
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy("login")
+    success_url = reverse_lazy("signup")
     template_name = "registration/signup.html"
 
 
+#login view
+class LoginForm(generic.CreateView):
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy("login")
+    template_name = "registration/login.html"
+
+
+
                     
-
-    
-# class ProfileView(generic.TemplateView):
-#     template_name = "registration/profile.html"
-
-# class EditProfileView(generic.TemplateView):
-#     template_name = "registration/edit_profile.html"
 
     
