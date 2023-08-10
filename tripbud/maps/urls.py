@@ -1,8 +1,8 @@
 from . views import *
 from django.urls import path, include
-from maps import views as view
+from maps import views
 
 urlpatterns = [
-    path('geocode', view.geocode, name='geocode'),
-    path('map', view.map, name='map'),
+    path('', views.map, name='map'),
+    path('geocode', views.geocode, name='geocode'),
 ]

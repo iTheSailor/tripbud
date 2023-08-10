@@ -29,22 +29,43 @@
     </style>
 </head>
 <body style="background: linear-gradient(315deg, rgba(114, 72, 16, 0.708), rgb(116, 208, 182)); height: 100vh">
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <div class="container-fluid">
-            <h1 class = "text-light m-2">tpbd</h1>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarID"
-                aria-controls="navbarID" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse align-self-end justify-content-end" id="navbarID">
-                <div class="navbar-nav">
-                    <a class="nav-link active m-2" aria-current="page" href="/">home</a>
-                    
-                </div>
+{% if user.is_authenticated %}
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="container-fluid">
+        <h1 class = "text-light m-2">tpbd</h1>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarID"
+            aria-controls="navbarID" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse align-self-end justify-content-end" id="navbarID">
+            <div class="navbar-nav">
+                <a class="nav-link active m-2" aria-current="page" href="{url for '[name = 'home']'}">home</a>
+                <a class="nav-link active m-2" aria-current="page" href="#">profile</a>
+                <a class="nav-link active m-2" aria-current="page" href="{ url for 'maps:maps/map'}">maps</a>
+                <a class="nav-link active m-2" aria-current="page" href="#">friends</a>
+                <a class="nav-link active m-2" aria-current="page" href="{ url for 'logout'}">logout</a>
             </div>
         </div>
-    </nav>
-    <div id="page" class="wrapper d-flex text-center">
+    </div>
+</nav>
+{% else %}
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="container-fluid">
+        <h1 class = "text-light m-2">tpbd</h1>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarID"
+            aria-controls="navbarID" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse align-self-end justify-content-end" id="navbarID">
+            <div class="navbar-nav">
+                <a class="nav-link active m-2" aria-current="page" href="/">home</a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+{% endif %}
+<div id="page" class="wrapper d-flex text-center">
             {% block content %}
             {% endblock %}
     </div>

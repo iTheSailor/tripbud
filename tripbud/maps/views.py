@@ -27,10 +27,8 @@ def geocode(request):
 
 def map(request):
     key = settings.GOOGLE_MAPS_API_KEY
-
     context = {
         'key': key,
-
     }
     return render(request, 'maps/map.html', context)
     
