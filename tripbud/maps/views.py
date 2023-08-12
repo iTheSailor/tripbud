@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 import googlemaps
 from googlemaps import convert, Client, maps
 from datetime import datetime
@@ -9,6 +9,8 @@ from django.conf import settings
 from django.views import generic
 from django.urls import reverse_lazy
 from .models import markers
+
+
 # Create your views here.
 
 def geocode(request):
@@ -35,14 +37,17 @@ def viewmap(request):
     }
     return render(request, 'maps/map.html', context)
 
-# @ajax_required
-# def get_markers(request):
-#     try:
-#         if request.method =='POST':
-#             marker_id = request.POST['marker_id']
-#             marker = markers.objects.get(id=marker_id)
-#             #pass
-#     #pass
+
+def add_marker(request):
+    try:
+        if request.method =='POST':
+            markers = markers.objects.all()
+            markers = [marker.to_json() for marker in markers]
+            return JsonResponse({'markers': markers})
+        
+    except Exception as e:
+        return JsonResponse({'error': str(e)})
+    
 
 
 

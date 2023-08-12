@@ -153,15 +153,47 @@ function createMarker(place) {
     marker = new google.maps.Marker({
         map,
         position: place.geometry.location,
+        id: place.place_id,
     });
     console.log(place);
     console.log(place.geometry.location.lat());
     console.log(place.geometry.location.lng());
+    console.log(place.place_id);
 
     markers.push(marker);
     console.log(markers);
     function addLocation(){ 
         infoWindow.close();
+        var csrf = $(this).attr('csrf');
+        var lan = place.geometry.location.lat();
+        var lng = place.geometry.location.lng();
+        var house_number = place.address_components[0].long_name;
+        var street = place.address_components[1].long_name;
+        var city = place.address_components[2].long_name;
+        var state = place.address_components[4].long_name;
+        var country = place.address_components[5].long_name;
+        var postal_code = place.address_components[6].long_name;
+        $.ajax({
+            url: '/add_marker',
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: csrf,
+                lat: lan,
+                lng: lng,
+                house_number: house_number,
+                street: street,
+                city: city,
+                state: state,
+                country: country,
+                postal_code: postal_code,
+            },
+            cache: false,
+            success: function (data) {
+                console.log(data);
+            }
+        });
+
+        
 
         markersList = document.getElementById("markerslist");
         markersList.innerHTML += '<li>' + place.formatted_address + '</li>';

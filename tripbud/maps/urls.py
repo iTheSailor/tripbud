@@ -7,4 +7,5 @@ app_name = 'maps'
 urlpatterns = [
     path('viewmap', views.viewmap, name='viewmap'),
     path('geocode', views.geocode, name='geocode'),
+    path('add_marker', views.add_marker, name='add_marker'),
 ]
