@@ -39,11 +39,12 @@
         </button>
         <div class="collapse navbar-collapse align-self-end justify-content-end" id="navbarID">
             <div class="navbar-nav">
-                <a class="nav-link active m-2" aria-current="page" href="{url for '[name = 'home']'}">home</a>
+                <a class="nav-link active m-2" aria-current="page" href="../">home</a>
+                <a class="nav-link active m-2" aria-current="page" href="#">dashboard</a>"
                 <a class="nav-link active m-2" aria-current="page" href="#">profile</a>
-                <a class="nav-link active m-2" aria-current="page" href="{ url for 'maps:maps/map'}">maps</a>
+                <a class="nav-link active m-2" aria-current="page" href="{% url 'maps:viewmap' %}">maps</a>
                 <a class="nav-link active m-2" aria-current="page" href="#">friends</a>
-                <a class="nav-link active m-2" aria-current="page" href="{ url for 'logout'}">logout</a>
+                <a class="nav-link active m-2" aria-current="page" href="/users/logout">logout</a>
             </div>
         </div>
     </div>
@@ -58,7 +59,7 @@
         </button>
         <div class="collapse navbar-collapse align-self-end justify-content-end" id="navbarID">
             <div class="navbar-nav">
-                <a class="nav-link active m-2" aria-current="page" href="/">home</a>
+                <a class="nav-link active m-2" aria-current="page" href="">home</a>
                 
             </div>
         </div>

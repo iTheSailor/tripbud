@@ -6,7 +6,9 @@ from datetime import datetime
 import json
 import requests
 from django.conf import settings
-
+from django.views import generic
+from django.urls import reverse_lazy
+from .models import markers
 # Create your views here.
 
 def geocode(request):
@@ -25,11 +27,25 @@ def geocode(request):
     }
     return render(request, 'maps/geocode.html', context)
 
-def map(request):
+def viewmap(request):
+
     key = settings.GOOGLE_MAPS_API_KEY
     context = {
         'key': key,
     }
     return render(request, 'maps/map.html', context)
+
+# @ajax_required
+# def get_markers(request):
+#     try:
+#         if request.method =='POST':
+#             marker_id = request.POST['marker_id']
+#             marker = markers.objects.get(id=marker_id)
+#             #pass
+#     #pass
+
+
+
+    
     
 

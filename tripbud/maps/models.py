@@ -1,8 +1,8 @@
 from django.db import models
-from googlemaps.maps import static_map
+from googlemaps.maps import static_map, StaticMapMarker, StaticMapPath
 
 # Create your models here.
-class destinations(models.Model):
+class markers(models.Model):
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     zipcode = models.CharField(max_length=200)
@@ -14,4 +14,7 @@ class destinations(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+
     
