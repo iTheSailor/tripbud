@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'users',
     'maps',
     'googlemaps',
+    'django_htmx',
 ]
 
 MIDDLEWARE = [

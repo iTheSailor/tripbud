@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+{% csrf_token %}
+{% load static %}
+
+<script src="http://maps.googleapis.com/maps/api/js?key={{key}}&callback=console.debug&libraries=maps,marker,places&v=beta"></script>
+
+
+<style>
+    #map {
+    position: absolute;
+    z-index: 0;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    border-width: 0px;
+    margin: 0px;
+    }
+    .mainwrapper{
+    height: 100%;
+    width: 95%;
+    margin: auto;
+    }
+    #mapwrap{
+    width: 75vw;
+    height: 75vh;
+    margin: auto;
+    display: grid;
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+    }
+    #buttonsarray{
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    transform: translate(12.5vw,20vh);
+    height: 40vh;
+    width: 50vw;
+    background-color: #00000066;
+    /* align-self: center; */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    }
+</style>
+
+<div class="mainwrapper">
+    <br><br><br>
+    <div id="mapwrap">     
+        <div id="map" ></div>
+    <div id="buttonsarray">
+        <a href="{% url 'maps:newmap' %}"><input type="button" value="New Map" > </a> 
+        <input type="button" value="Existing Map">       
+    </div>
+</div>
+
+
+<script type="text/javascript" async src="{% static 'maps/initmap.js' %}" onload="initMap()"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js">  </script>
+
+{% endblock %}

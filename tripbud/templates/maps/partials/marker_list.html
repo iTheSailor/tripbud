@@ -1,0 +1,29 @@
+<table id="markerslist" class="table">
+  <thead>
+    <tr>
+      <th scope="col">Address</th>
+      <th scope="col">Latitude</th>
+      <th scope="col">Longitude</th>
+      <th scope="col">Delete</th>
+    </tr>
+    {% if markers %} {% csrf_token %} {% for marker in markers %}
+    <tr>
+      <td scope="col">{{marker.address}}</td>
+      <td>{{marker.lat}}</td>
+      <td>{{marker.lng}}</td>
+      <td>
+        <a href="/maps/delete_marker/{{marker.id}}">
+          <button class="warning">Delete</button>
+        </a>
+      </td>
+      {% endfor %}
+    </tr>
+    <tr>
+      <button value="{{marker.id}}" method="POST" href="/maps/delete_marker">
+        delete
+      </button>
+    </tr>
+    {% endif %}
+  </thead>
+  <tbody id="markerslistbody"></tbody>
+</table>

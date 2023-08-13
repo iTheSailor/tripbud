@@ -5,8 +5,6 @@ from .managers import CustomUserManager
 # Create your models here.
 
 class CustomUser(AbstractUser):
-    first_name = models.CharField(max_length=50, default='Anonymous')
-    last_name = models.CharField(max_length=50, default='Anonymous')
     email = models.EmailField(max_length=254, unique=True)
     username = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=256)
