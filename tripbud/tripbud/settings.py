@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'users',
     'maps',
     'googlemaps',
+    'django_htmx',
+    'template_partials',
 ]
 
 MIDDLEWARE = [
@@ -54,11 +56,18 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'tripbud.urls'
 
+default_loaders = [
+    "django.template.loaders.filesystem.Loader",
+    "django.template.loaders.app_directories.Loader",
+]
+cached_loaders = [("django.template.loaders.cached.Loader", default_loaders)]
+partial_loaders = [("template_partials.loader.Loader", cached_loaders)]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
+        #'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -66,6 +75,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            "debug": True,
+            # TODO: Add wrap_loaded function to the called from an AppConfig.ready().
+            "loaders": partial_loaders,
         },
     },
 ]

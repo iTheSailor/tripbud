@@ -1,71 +1,113 @@
-{% extends "base.html" %}
-{% block content %}
-
-{% load static %}
+{% extends "base.html" %} {% block content %} {% csrf_token %} {% load static %}
 
 <script src="http://maps.googleapis.com/maps/api/js?key={{key}}&callback=console.debug&libraries=maps,marker,places&v=beta"></script>
 
-
 <style>
-    #map {
-        height: 500px;
-        width: 50%;
-    }
-    .mainwrapper{
-        height: 100%;
-        width: 95%;
-    }
-    #mapwrap{
-        width: 85%;
-        margin: auto;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-    #markerslist{
-        width: 40%;
-        height: 500px;
-        overflow-y: scroll;
-        background: rgba(255, 255, 255, 0.302);
-    }
+  #map {
+    height: 500px;
+    width: 50%;
+  }
+  .mainwrapper {
+    height: 100%;
+    width: 95%;
+  }
+  #mapwrap {
+    width: 85%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  #markerslist {
+    width: 40%;
+    height: 500px;
+    overflow-y: scroll;
+    background: rgba(255, 255, 255, 0.302);
+  }
+  #editbutton {
+    color: rgba(63, 65, 37, 0.822);
+    background-color: rgba(255, 255, 255, 0);
+    border-color: #cdd081;
+    border: none;
+
+    
+  }
 </style>
 
-<div class="mainwrapper m-auto~">
-    <br><br><br>
-    <div id="mapwrap">
+<div class="mainwrapper m-auto">
+  {% load static %}
+  <br />
+  <div id="titlespot">
+    <h1>{{map.name}}
+    <button id="editbutton" type="button" class="btn btn-secondary" hx-get="rename_map/{{map.id}}" hx-target="#titlespot" hx-swap="outerHTML" hx-vals='{"mykey" : "orzo"}'>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi-pencil-square" viewBox="0 0 16 16">
+<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"></path>
+<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
+      </svg>
+    </h1>
+  </button>
 
-        <div id="map" ></div>
-        <table id="markerslist" class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Latitude</th>
-                    <th scope="col">Longitude</th>
-                </tr>
-            </thead>
-            <tbody id="markerslistbody">
-            </tbody>
-        </table>
-    </div>
+  </div>
+  <br /><br />
+  <div id="mapwrap">
+    <div id="map"></div>
+    <table id="markerslist" class="table" style="text-align: center; vertical-align: middle;">
+      {% if markers %} {% csrf_token %} {% for marker in markers %}
+      <thead>
+        <tr>
+          <th scope="col" style="width:50%">Locations</th>
+          <th scope="col">Coordinates</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody id="markerslistbody" style="text-align: center; vertical-align: middle;">
         
-    <br>
-    <div class="buttonsarray">
+        <tr>
+          <td scope="col"> {{marker.address}}</td>
+          <td>
+            <p>Lat: {{marker.lat}}</p>
+            <p>Lng: {{marker.lng}}</p>
+          </td>
+          <td>
+            <a href="/maps/delete_marker/{{marker.id}}">
+              <button class="warning">Delete</button>
+            </a>
+          </td>
+          {% endfor %}
+        </tr>
+        {% else%}
+        <tr>
+          <td scope="col"> <h4>Your markers will go here</h4></td>
+        </tr>
+        {% endif %}
 
-        <div id="floating-panel">
-            <input type="button" id="show-markers" value="Show Markers">
-            <input type="button" id="clear-markers" value="Hide Markers">
-            <input type="button" id="delete-markers" value="Delete Markers">
-        </div>
-        <br>
-        <button id = "pan-to-current-location" class="btn btn-primary">Pan to Current Location</button>
-        <input type="text" id="searchTextField">
-        <button onclick='finder()' id="search-location" class="btn btn-primary">Search</button>
+      </tbody>
+    </table>
+  </div>
+  <br />
+  <div class="buttonsarray">
+    <div id="floating-panel">
+      <input type="button" id="show-markers" value="Show Markers" hx-post="{{map.id}}" hx-target="#markerslist" hx-swap="outerHTML"  hx-swap-oob="true"/>
+      <input type="button" id="clear-markers" value="Hide Markers" />
+      <input type="button" id="delete-markers" value="Delete Markers" />
     </div>
-    
+    <br />
+    <button id="pan-to-current-location" class="btn btn-primary">
+      Pan to Current Location
+    </button>
+    <input type="text" id="searchTextField" />
+    <button onclick="finder()" id="search-location" class="btn btn-primary">
+      Search
+    </button>
+  </div>
 </div>
 
+<script
+  type="text/javascript"
+  async
+  src="{% static '/maps/maps.js' %}"
+  onload="initMap()"
+></script>
 
-<script type="text/javascript" async src="{% static '/maps/maps.js' %}" onload="initMap()"></script>
-
-{% endblock %}
-```
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+{% endblock %} ```

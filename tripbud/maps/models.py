@@ -4,25 +4,35 @@ from django.db.models import ManyToManyField
 from googlemaps.maps import static_map, StaticMapMarker, StaticMapPath
 
 # Create your models here.
-class markers(models.Model):
-    name = models.CharField(max_length=200)
+
+    
+class Marker(models.Model):
+    marker_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
+    lat = models.CharField(max_length=6)
+    lng = models.CharField(max_length=6)
     address = models.CharField(max_length=200)
-    zipcode = models.CharField(max_length=200)
-    city = models.CharField(max_length=200)
-    country = models.CharField(max_length=200)
-    lat = models.CharField(max_length=200)
-    lng = models.CharField(max_length=200)
-    postal_code = models.CharField(max_length=200)
+    tagger = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.address
     
-class maps(models.Model):
+    def get_marker_by_id(self,marker_id):
+        marker = marker_id
+        return marker
+    
+    def delete_marker(self,marker_id):
+        marker = marker_id
+        marker.delete()
+        return marker
+    
+
+
+
+class Map(models.Model):
+    map_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
     name = models.CharField(max_length=200)
-    stop = ManyToManyField(markers)
+    stop = ManyToManyField(Marker)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
-
-    
