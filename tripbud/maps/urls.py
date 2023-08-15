@@ -13,5 +13,5 @@ urlpatterns = [
     path('newmap', views.newmap, name='newmap'),
     path('<int:id>', views.viewmap, name='viewmap'),
     path('get_markers_list', views.get_markers_list, name='get_markers_list'),
-    path('rename_map', views.rename_map, name='rename_map'),
+    path('rename_map/<int:map_id>', views.rename_map, name='rename_map'),
 ]

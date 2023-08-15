@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect, response, request
 from .models import Marker, Map
@@ -17,14 +17,17 @@ def initmap(request):
 def newmap(request):
     username = request.user
     existing_maps = []
-    get_all_users_maps(request)
-    for map in get_all_users_maps(request):
-        existing_maps.append(map.name)
-    current_map_number = len(existing_maps)
-    a = Map.objects.create(name=f"{username}'s_map_{current_map_number}", author=request.user)
-    a.save()
-    
-    return redirect('maps:viewmap', id=current_map_number)
+    prev_map = get_all_users_maps(request)
+    if prev_map:
+        for map in get_all_users_maps(request):
+            existing_maps.append(map.name)
+        current_map_number = len(existing_maps)
+        a = Map.objects.create(name=f"{username}'s_map_{current_map_number}", author=request.user)
+        a.save()
+        return redirect('maps:viewmap', id=current_map_number)
+    fledgling_map = Map.objects.create(name=f"welcome, and safe travels, {username}", author=request.user)
+    fledgling_map.save()
+    return redirect('maps:viewmap', id=fledgling_map.id)
 
 def viewmap(request, id):
     if request.method == 'POST':
@@ -130,7 +133,9 @@ def get_place_by_id(place_id):
 def get_all_users_maps(request):
     user = request.user
     maps = Map.objects.filter(author=user)
-    return maps
+    if maps:
+        return maps
+    return None
 
 
 #geocode
@@ -154,20 +159,38 @@ def geocode(request):
 
 #map manipulation
 
-def rename_map(request):
+def rename_map(request, map_id=''):
+    map = Map.objects.get(pk=map_id)
+    
     if request.method == 'GET':
-        map_id = request.GET['map_id']
-        map = Map.objects.get(pk=map_id)
+        print('Into the title change view 1/2')
         print(request.GET)
         print(map.name)
-        title_edit_html = f'<div class="input-group m-auto" style="width:25%;"><button type="button" class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></button><input type="text" class="form-control"id="title_edit" name="title_edit" value="{map.name}"/> <button type="button" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"></path></svg></button></div>'
+        title_edit_html = '<form id="titlespot" class="input-group m-auto"  hx-swap="outerHTML" style="width:25%;"><button type="button" class="btn btn-danger" hx-target="#titlespot" hx-put="/maps/rename_map/{}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></button><input type="text" class="form-control" id="title_edit" name="title_edit" value="" placeholder="{}" /><button type="submit" class="btn btn-secondary" hx-target="#titlespot" hx-post="/maps/rename_map/{}"  {}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"></path></svg></button></form>'.format(map.pk, 'edit map name...',map.pk,'hx-vals=\'{"mykey" : "orzo"}\'')
+        print(map.id)
         return HttpResponse(title_edit_html)
-    data = request.POST
-    map_id = data['map_id']
-    map = Map.objects.get(pk=map_id)
-    map.name = data['name']
-    map.save()
-    return HttpResponse('success')
+    
+    
+    if request.method == 'PUT':
+        print('Into the title change view 2/2')
+        data = request.POST
+        print(data)
+        print(len(data))
+        print('| | | =============================>')
+        print(' |||   PUT  |||')
+        print('| | | =============================>')
+        if len(data) < 1:
+            print('canceling title change')
+            print(map)
+            title = '<div id="titlespot" >    <h1>{}   <button type="button"class="btn btn-secondary" id="editbutton" hx-get="/maps/rename_map/{}" hx-target="#titlespot" hx-swap="outerHTML" {}>      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"></path><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>      </svg>    </h1>  </button>'.format(map.name,map.id, 'hx-vals=\'{"mykey" : "orzo"}\'')
+            print(map.pk)
+            return HttpResponse(title)
+    print("FINALLY AT THE END")
+    title = request.POST['title_edit']
+    map.name = title
+    new_title= '<div id="titlespot" >    <h1>{}   <button type="button"class="btn btn-secondary"  id="editbutton" hx-get="/maps/rename_map/{}" hx-target="#titlespot" hx-swap="outerHTML" {}>      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"></path><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>      </svg>    </h1>  </button>'.format(map.name,map.id, 'hx-vals=\'{"mykey" : "orzo"}\'')
+    return HttpResponse(new_title)
 
-
-
+def load_title_partial(request):
+    response = render(request, 'maps/partials/title_holder.html')
+    return response
