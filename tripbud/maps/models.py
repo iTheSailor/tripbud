@@ -8,8 +8,8 @@ from googlemaps.maps import static_map, StaticMapMarker, StaticMapPath
     
 class Marker(models.Model):
     marker_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
-    lat = models.CharField(max_length=200)
-    lng = models.CharField(max_length=200)
+    lat = models.CharField(max_length=6)
+    lng = models.CharField(max_length=6)
     address = models.CharField(max_length=200)
     tagger = models.ForeignKey(User, on_delete=models.CASCADE)
 

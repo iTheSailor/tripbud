@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block content %} {% csrf_token %} {% load static %}
+{% extends "base.html" %} {% block content %} {% csrf_token %} {% load static %} {% load partials %}
 
 <script src="http://maps.googleapis.com/maps/api/js?key={{key}}&callback=console.debug&libraries=maps,marker,places&v=beta"></script>
 
@@ -27,23 +27,38 @@
 </style>
 
 <div class="mainwrapper m-auto~">
-  <br /><br /><br />
+  <br />
+  <div hx-target="this" hx-swap="outerHTML">
+    <h1>{{map.name}}
+    <button type="button" class="btn btn-secondary" hx-get="/maps/rename_map" hx-vals="js:{map_id: get_map_id()}">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"></path>
+<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
+      </svg>
+    </h1>
+    </button>
+
+  </div>
+  <br /><br />
   <div id="mapwrap">
     <div id="map"></div>
-    <table id="markerslist" class="table">
+    <table id="markerslist" class="table" style="text-align: center; vertical-align: middle;">
+      {% if markers %} {% csrf_token %} {% for marker in markers %}
       <thead>
         <tr>
-
-          <th scope="col">Address</th>
-          <th scope="col">Latitude</th>
-          <th scope="col">Longitude</th>
+          <th scope="col" style="width:50%">Locations</th>
+          <th scope="col">Coordinates</th>
           <th scope="col">Delete</th>
         </tr>
-        {% if markers %} {% csrf_token %} {% for marker in markers %}
+      </thead>
+      <tbody id="markerslistbody" style="text-align: center; vertical-align: middle;">
+        
         <tr>
-          <td scope="col">{{marker.address}}</td>
-          <td>{{marker.lat}}</td>
-          <td>{{marker.lng}}</td>
+          <td scope="col"> {{marker.address}}</td>
+          <td>
+            <p>Lat: {{marker.lat}}</p>
+            <p>Lng: {{marker.lng}}</p>
+          </td>
           <td>
             <a href="/maps/delete_marker/{{marker.id}}">
               <button class="warning">Delete</button>
@@ -51,24 +66,19 @@
           </td>
           {% endfor %}
         </tr>
+        {% else%}
         <tr>
-          <button
-            value="{{marker.id}}"
-            method="POST"
-            href="/maps/delete_marker"
-          >
-            delete
-          </button>
+          <td scope="col"> <h4>Your markers will go here</h4></td>
         </tr>
         {% endif %}
-      </thead>
-      <tbody id="markerslistbody"></tbody>
+
+      </tbody>
     </table>
   </div>
   <br />
   <div class="buttonsarray">
     <div id="floating-panel">
-      <input type="button" id="show-markers" value="Show Markers" />
+      <input type="button" id="show-markers" value="Show Markers" hx-post="{{map.id}}" hx-target="#markerslist" hx-swap="outerHTML"  hx-swap-oob="true"/>
       <input type="button" id="clear-markers" value="Hide Markers" />
       <input type="button" id="delete-markers" value="Delete Markers" />
     </div>
@@ -89,5 +99,27 @@
   src="{% static '/maps/maps.js' %}"
   onload="initMap()"
 ></script>
+
+<script>
+  function title_form(contact){
+    return `<form hx-put="/contact/1" hx-target="this" hx-swap="outerHTML">
+  <div>
+    <label for="firstName">First Name</label>
+    <input autofocus type="text" id="firstName" name="firstName" value="${contact.firstName}">
+  </div>
+  <div class="form-group">
+    <label for="lastName">Last Name</label>
+    <input type="text" id="lastName" name="lastName" value="${contact.lastName}">
+  </div>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" value="${contact.email}">
+  </div>
+  <button class="btn" type="submit">Submit</button>
+  <button class="btn" hx-get="/contact/1">Cancel</button>
+</form>`
+    }
+
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 {% endblock %} ```

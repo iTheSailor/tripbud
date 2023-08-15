@@ -133,20 +133,34 @@ function finder() {
   };
   service = new google.maps.places.PlacesService(map);
   service.findPlaceFromQuery(request, (results, status) => {
-    if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        createMarker(results[i]);
+      }
+      
       map.setCenter(results[0].geometry.location);
       result = results[0].geometry.location;
       infoWindow.setContent(
         '<div id="info-window">' +
-          '<button id="add-location" onclick="addLocation()" value=' +
-          result +
+          // "<p>Location: " +
+          // results[0].formatted_address +
+          // "</p>" +
+          // "<p>Latitude: " +
+          // latLng.lat() +
+          // "</p>" +
+          // "<p>Longitude: " +
+          // latLng.lng() +
+          // "</p>" +
+          '<button id="add-location"  hx-post="{{map.id}}" hx-target="#markerslist" hx-swap="outerHTML"  hx-swap-oob="true" onclick="createMarker.addLocation()"' +
+          map_id + 
           ">Add Location</button>" +
-          '<button id="cancel" onclick="cancelLocation()">Cancel</button>' +
+          '<button id="cancel" onclick="createMarker.cancelLocation()">Cancel</button>' +
           "</div>"
       );
       infoWindow.setPosition(results[0].geometry.location);
 
       infoWindow.open(map, this);
+      createMarker(results[0]);
     }
   });
 }
@@ -175,7 +189,8 @@ function createMarker(place) {
       type: "POST",
       url: "/maps/add_marker",
       data: {
-        id: place.place_id,
+        'id': place.place_id,
+        'map_id': map_id,
       },
       success: function (data) {
         console.log(data);
@@ -197,21 +212,6 @@ function setMapOnAll(map) {
     markers[i].setMap(map);
   }
 }
-
-// async function createMarker(place) {
-
-//     if (place.geometry.viewport) {
-//         bounds.union(place.geometry.viewport);
-//     } else {
-//         bounds.extend(place.geometry.location);
-//     }
-//     var marker = new google.maps.Marker({
-//         map,
-//         position: place.geometry.location,
-//     });
-//     markers.push(marker);
-
-// }
 
 function showMarkers() {
   setMapOnAll(map);
