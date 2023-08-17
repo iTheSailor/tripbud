@@ -1,4 +1,4 @@
-#!/Users/shell/Desktop/projects/projects/tripbud/djangoenv/bin/python3
+#!/Users/shell/Documents/GitHub/tripbud/djangoenv/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys
