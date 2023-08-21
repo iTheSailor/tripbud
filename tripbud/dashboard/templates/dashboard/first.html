@@ -1,0 +1,211 @@
+{% extends 'base.html' %} {% block content %} {% load humanize %}
+
+
+<!--REMEMBER TO PORT IN POST LIKES-->
+<style>
+  body{
+    background: rgb(95,56,25);
+    background: linear-gradient(318deg, rgba(95,56,25,0.8519782913165266) 6%, rgba(124,216,156,0.8911939775910365) 76%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    overflow-y: hidden;
+    position: relative;
+  }
+  #feed{
+    width: 90rem;
+    height: 100rem;
+    background-color: rgba(201, 207, 194, 0.717);
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow-y: hidden;
+  }
+  .postwrapper {
+    background-color: rgba(41, 95, 30, 0.051);
+    border: 3px solid black;
+    padding:  10px 20px  10px 20px; 
+    border-spacing: 10px;
+    border-radius: 10px;
+    border-right: rgba(175, 200, 163, 0.372)1px solid;
+    border-bottom: rgba(171, 150, 126, 0.217)1px solid;
+    border-top: rgba(0, 0, 0, 0.666) 2px solid;
+  }
+  .postusercard{
+    border: 3px solid black;
+    padding:  10px 20px  10px 20px; 
+    border-spacing: 10px;
+    border-radius: 10px;
+    border-left: rgba(175, 200, 163, 0.372)1px solid;
+    border-top: rgba(171, 150, 126, 0.217)1px solid;
+    border-bottom: rgba(0, 0, 0, 0.666) 2px solid;
+  }
+  #newpostinput {
+    border: 3px solid rgba(0, 0, 0, 0.406);
+    padding: 5px;
+    background: #00000000;
+  }
+    /***** MODAL DIALOG ****/
+  #modal {
+	/* Underlay covers entire screen. */
+	position: fixed;
+	top:0px;
+	bottom: 0px;
+	left:0px;
+	right:0px;
+	background-color:rgba(0,0,0,0.5);
+	z-index:1000;
+
+	/* Flexbox centers the .modal-content vertically and horizontally */
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+
+	/* Animate when opening */
+	animation-name: fadeIn;
+	animation-duration:250ms;
+	animation-timing-function: ease;
+}
+
+#modal > .modal-underlay {
+	/* underlay takes up the entire viewport. This is only
+	required if you want to click to dismiss the popup */
+	position: absolute;
+	z-index: -1;
+	top:0px;
+	bottom:0px;
+	left: 0px;
+	right: 0px;
+}
+
+#modal > .modal-content {
+	/* Position visible dialog near the top of the window */
+	margin-top:20vh;
+
+	/* Sizing for visible dialog */
+	width:80%;
+	max-width:600px;
+
+	/* Display properties for visible dialog*/
+	border:solid 1px #999;
+	border-radius:8px;
+	box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.3);
+	background-color:white;
+	padding:20px;
+
+	/* Animate when opening */
+	animation-name:zoomIn;
+	animation-duration:150ms;
+	animation-timing-function: ease;
+}
+
+#modal.closing {
+	/* Animate when closing */
+	animation-name: fadeOut;
+	animation-duration:150ms;
+	animation-timing-function: ease;
+}
+#modal.closing > .modal-content {
+	/* Animate when closing */
+	animation-name: zoomOut;
+	animation-duration:150ms;
+	animation-timing-function: ease;
+}
+
+@keyframes fadeIn {
+	0% {opacity: 0;}
+	100% {opacity: 1;}
+} 
+
+@keyframes fadeOut {
+	0% {opacity: 1;}
+	100% {opacity: 0;}
+} 
+
+@keyframes zoomIn {
+	0% {transform: scale(0.9);}
+	100% {transform: scale(1);}
+} 
+
+@keyframes zoomOut {
+	0% {transform: scale(1);}
+	100% {transform: scale(0.9);}
+} 
+
+  
+</style>
+
+<div id="feed" class="m-auto">
+  <br><br><br>
+  <div class="col m-auto">
+    <h1 class="text-center border-bottom pb-2">FEED TITLE HOLDER </h1>
+    <br>
+  </div>
+  <div style="width: 90rem">
+  <div class="postfield" id="postform">
+      <form class="input-group w-50 m-auto" id="newpostinput">      
+        <input name="title"
+          class="form-control" id="temp_title"  placeholder="create a new post..." hx-target="#postform" hx-get="newpost" hx-trigger="keydown delay:1s">
+      </form>
+  </div>
+  
+<br><br><br><br><br>
+  <div class="postmain d-flex m-auto w-75 justify-content-between" >
+    <div class="postwrapper w-75" >
+        <h3 class="border-bottom">TITLE</h3>
+        <div>
+            <div class="imagecontent">IMAGE
+              <br><br><br><br>
+            </div>
+            <div class="text_content">TEXT TEXT TEXT TEXT
+              <br>
+              TEXT TEXT TEXT TEXT
+              <br>
+              <br>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end text-white-50">
+          <span>--likes   </span>
+          <span>--comments   </span>
+        </div>
+      </div>
+      <div class="postusercard d-flex flex-column justify-content-between" >
+        <div class="author">NAME</div>
+        <div class="d-flex flex-column interactiongroup">
+          <span class="text-muted">date</span>
+          <div>
+
+            <button>like</button>
+            <button>comment</button>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="w-75 m-auto">
+    <br><br>
+    <span class="text-muted">
+      Hmm... It's empty in here. Let's add some trips! Post something yourself,
+      or go find some trips to join!
+    </span>
+  </div>
+  {% if posts.length > 0 %}
+  {% for post in posts %}
+  <div class="postwrapper">
+  <div>
+    <div class="title">{{post.title}}</div>
+    <div class="author">{{post.author}}</div>
+  </div>
+  <div>
+    {% if post.image %}
+      <div class="imagecontent">{{post.image}}</div>
+    {% endif %}
+      <div class="text_content">{{post.text_content}}</div>
+  </div>
+  <div class="date">{{post.date_updated}}</div>
+  <div class="likes">{{post.}}</div>
+  {% endfor %}
+  {% endif %}
+</div>
+
+</div>
+
+{% endblock %}
