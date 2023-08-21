@@ -87,18 +87,17 @@
 	100% {transform: scale(0.9);}
 } 
 </style>
-
 <div id="modal" _="on closeModal add .closing then wait for animationend then remove me">
 	<div class="modal-underlay" _="on click trigger closeModal"></div>
 	<div class="modal-content">
 		<div class="m-auto">
-            <form class="form-floating mb-3">
+            <form class="form-floating mb-3" href="/new_post" method="post"> {% csrf_token %}
               <input
                 type="text"
                 class="form-control"
                 name="title"
                 id="title"
-                value="{{title}}"
+                value="{{temp_title}}"
               />
               <textarea
                 type="textarea"
@@ -114,16 +113,17 @@
                     type="file"
                     class="form-control"
                     name=""
-                    id=""
+                    id="image"
                     placeholder=""
                     aria-describedby="fileHelpId"
                   />
                   <div id="fileHelpId" class="form-text"></div>
                 </div>
               </div>
+			  <button type="submit" class="btn btn-primary">Submit</button>
             </form>
           </div>
           
-		<button _="on click trigger closeModal">Close</button>
+		<a href="/dashboard"><button class="btn btn-danger">Cancel</button></a>
 	</div>
 </div>

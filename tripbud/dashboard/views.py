@@ -32,7 +32,18 @@ def new_post(request):
         print("GET")
         print(request.GET)
         temp_title= request.GET.get('q')
-        respond = HttpResponse(render(request, 'dashboard/newpost.html', {'title': temp_title}))
+        respond = HttpResponse(render(request, 'dashboard/newpost.html', temp_title))
+        return respond
+    elif request.method == 'POST':
+        print("POST")
+        print(request.POST)
+        temp_title = request.POST.get('title')
+        temp_content = request.POST.get('content')
+        temp_image = request.POST.get('image')
+        temp_user = request.user
+        temp_post = Post.objects.create(title=temp_title, content=temp_content, image=temp_image, user=temp_user)
+        temp_post.save()
+        respond = HttpResponse(render(request, 'dashboard/feed.html'))
         return respond
 
 def get_modal(request):
