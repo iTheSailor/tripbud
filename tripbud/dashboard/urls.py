@@ -2,14 +2,14 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
-from .views import first
+from .views import DashboardView
 from . import views
 
 app_name = 'dashboard'
 
 
 urlpatterns = [
-    path('', views.first, name='first'),
-    path('newpost', views.new_post, name='newpost'),
-    path('modal', views.get_modal, name='modal'),
+    path('', DashboardView.as_view(), name='dashboard'),
+    path('create_post', views.create_post, name='create_post'),
+    path('add_comment', views.add_comment, name='add_comment'),
 ]

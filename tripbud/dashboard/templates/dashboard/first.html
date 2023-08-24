@@ -135,10 +135,10 @@
 </style>
 
 <div id="feed" class="m-auto">
-  <br><br><br>
+  
   <div class="col m-auto">
-    <h1 class="text-center border-bottom pb-2">FEED TITLE HOLDER </h1>
-    <br>
+    <h1 class="text-center border-bottom pb-2">{{date}}</h1>
+    
   </div>
   <div style="width: 90rem">
   <div class="postfield" id="postform">
@@ -148,23 +148,19 @@
       </form>
   </div>
   
-<br><br><br><br><br>
+
   <div class="postmain d-flex m-auto w-75 justify-content-between" >
     <div class="postwrapper w-75" >
-        <h3 class="border-bottom">TITLE</h3>
+        <h3 class="border-bottom"></h3>
         <div>
             <div class="imagecontent">IMAGE
-              <br><br><br><br>
+
             </div>
-            <div class="text_content">TEXT TEXT TEXT TEXT
-              <br>
-              TEXT TEXT TEXT TEXT
-              <br>
-              <br>
+            <div class="text_content">
             </div>
         </div>
         <div class="d-flex justify-content-end text-white-50">
-          <span>--likes   </span>
+          <span>--likes  {{ now }}  </span>
           <span>--comments   </span>
         </div>
       </div>
@@ -181,7 +177,7 @@
       </div>
   </div>
   <div class="w-75 m-auto">
-    <br><br>
+    
     <span class="text-muted">
       Hmm... It's empty in here. Let's add some trips! Post something yourself,
       or go find some trips to join!

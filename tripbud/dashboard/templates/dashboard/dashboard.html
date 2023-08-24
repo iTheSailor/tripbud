@@ -1,0 +1,23 @@
+{% extends dashboard/base.html %} {% load static %} {% block content %}{% csrf_token %}
+
+    <div>
+        <a href="{% url 'create_post' %}">Create Post</a>
+        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'home' %}">Home</a>
+    <h1 >Dashboard</h1>
+        {% for post in posts %}
+            <div>
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.text_content }}</p>
+                <img src="{{ post.image.url }}" alt="Post Image">
+                <p>Author: {{ post.author.username }}</p>
+                <p>Likes: {{ post.total_likes }}</p>
+                <a href="{% url 'post_detail' post_id=post.id %}">View Post</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    
+{% endblock %}

@@ -1,60 +1,47 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from users.models import CustomUser as User
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
 from .models import Post, Comment
-from .forms import CommentForm, PostForm
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.decorators import login_required
-from .utils import is_ajax
 
-# Create your views here.
+class DashboardView(LoginRequiredMixin, View):
+    def get(self, request):
+        posts = Post.objects.all().order_by('-date_posted')
+        return render(request, 'dashboard.html', {'posts': posts})
 
-###turn likes back on
-def first(request):
-    post = Post.objects.all()
-    # post_likes = Post.objects.total_likes()
-    context = {
-        'post': post,
-        # 'post_likes': post_likes
-    }
-    return render(request, 'dashboard/first.html', context)
+@login_required
+def create_post(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        text_content = request.POST.get('text_content')
+        image = request.FILES.get('image')
+        post = Post.objects.create(
+            title=title,
+            text_content=text_content,
+            image=image,
+            author=request.user
+        )
+        return redirect('dashboard')  # Redirect to the dashboard or post detail page
+    return render(request, 'create_post.html')
 
-def get_feed(request):
-    context ={
-        'posts': Post.objects.all()
-    }
-    return render(request, 'dashboard/feed.html', context)
+@login_required
+def add_comment(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    if request.method == 'POST':
+        text_content = request.POST.get('text_content')
+        comment = Comment.objects.create(
+            post=post,
+            text_content=text_content,
+            author=request.user
+        )
+        return redirect('post_detail', post_id=post.id)  # Redirect to the post detail page
+    return render(request, 'add_comment.html', {'post': post})
 
-def new_post(request):
-    if request.method == 'GET':
-        print("GET")
-        print(request.GET)
-        temp_title= request.GET.get('title')
-        data = {
-            'temp_title': temp_title,
-        }
-        respond = HttpResponse(render(request, 'dashboard/newpost.html', data ))
-        return respond
-    elif request.method == 'POST':
-        print("POST")
-        print(request.POST)
-        post_entry = request.POST
-        data = {
-            'title' : post_entry['title'],
-            'text_content' : post_entry['text_content'],
-            'image' : post_entry['image'],
-            'author' : request.user,
-        }
-        new_post = Post.objects.create(**data)
-        new_post.save()
-        respond = HttpResponse(render(request, 'dashboard/feed.html'))
-        return respond
+@login_required
+def like_post(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    if request.method == 'POST':
+        post.likes.add(request.user)
+        return redirect('dashboard') 
+    return redirect('dashboard')  
 
-def get_modal(request):
-    if request.method == 'GET':
-        print("GET")
-        print(request.GET)
-        respond = HttpResponse(render(request, 'dashboard/modal.html'))
-        return respond
