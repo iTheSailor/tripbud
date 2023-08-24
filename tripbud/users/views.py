@@ -60,7 +60,7 @@ def signup_view(request):
 
         form = SignUpForm()
 
-    return render(request, 'registration/signup.html', {'form': form})
+    return render(request, '/dashboard', {'form': form})
 
 
 

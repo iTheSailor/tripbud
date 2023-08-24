@@ -2,24 +2,30 @@
 {% load static %}
 {% block content %}
 {% if user.is_authenticated %}
-<div>
-    <h1>Dashboard</h1>
-    <p>Welcome, {{ user.username }}!</p>
-    <div>
-        <div class="card" style="width:18rem;">
-          <img src="https://images.unsplash.com/photo-1561154464-82e9adf32764?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <h6 class="card-subtitle mb-2 text-muted ">Card subtitle</h6>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            b5
-          </div>
-        </div>
-    </div>
-</div>
+<div style="width: 90%;" class="d-flex justify-content-around m-auto">
 
-{% else %}
-    <h1>you must be signed in</h1>
-    <a href="{% url 'login' %}">login</a> | <a href="{% url 'signup' %}">signup</a>
-{% endif %}
+  <div class="d-flex mt-5 justify-content-center">
+    <a href="name = create_post"><button class="btn btn-dark btn-lg"> Write a new post!</button></a>
+  </div>
+  <div class="d-flex flex-column m-auto">
+      <h1>Dashboard</h1>
+      <p>Welcome, {{ user.username }}!</p>
+      <div >
+          <div class="card" style="width:30rem; margin:auto;">
+            <img src="https://images.unsplash.com/photo-1561154464-82e9adf32764?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <h6 class="card-subtitle mb-2 text-muted ">Card subtitle</h6>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              
+            </div>
+          </div>
+      </div>
+  </div>
+  
+  {% else %}
+      <h1>you must be signed in</h1>
+      <a href="{% url 'login' %}">login</a> | <a href="{% url 'signup' %}">signup</a>
+  {% endif %}
+</div>
 {% endblock %}

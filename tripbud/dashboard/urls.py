@@ -10,6 +10,6 @@ app_name = 'dashboard'
 
 urlpatterns = [
     path('', DashboardView.as_view(), name='dashboard'),
-    path('create_post', views.create_post, name='create_post'),
-    path('add_comment', views.add_comment, name='add_comment'),
+    path('content/create_post', views.create_post, name='create_post'),
+    path('content/add_comment', views.add_comment, name='add_comment'),
 ]

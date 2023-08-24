@@ -1,11 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 
-{% block title %}Create a New Post{% endblock %}
 
 
 
 {% block content %}
-<body>
+
     <h1>Create a New Post</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -17,5 +16,7 @@
         <input type="file" name="image"><br>
         <button type="submit">Create Post</button>
     </form>
-</body>
-</html>
+
+
+
+{% endblock %}
