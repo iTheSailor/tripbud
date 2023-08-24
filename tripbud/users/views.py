@@ -5,7 +5,7 @@ from .forms import CustomUserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from users.models import CustomUser as User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 import requests
 from django.contrib.sessions.models import Session
 
@@ -41,5 +41,26 @@ class RegisterationForm(generic.CreateView):
 #     request.session['user_id'] = request.user.id
 #     print(request.session['user_id'])
 #     return render(request, 'users/profile.html')
+
+
+from .forms import SignUpForm
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            print("form is valid")
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password')
+            print("username is: ", username)
+            return redirect('dashboard')
+    else:
+        messages.error(request, "Account not created")
+
+        form = SignUpForm()
+
+    return render(request, 'registration/signup.html', {'form': form})
+
 
 
