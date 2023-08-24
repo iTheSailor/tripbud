@@ -12,7 +12,7 @@ class Post(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
-    dislikes = models.ManyToManyField(User, related_name='dislikes', blank=True)
+    comments = models.ManyToManyField('Comment', related_name='comments', blank=True)
 
     def __str__(self):
         return self.title

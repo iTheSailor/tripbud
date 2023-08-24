@@ -91,28 +91,37 @@
 	<div class="modal-underlay" _="on click trigger closeModal"></div>
 	<div class="modal-content">
 		<div class="m-auto">
+			
             <form class="form-floating mb-3" href="/new_post" method="post"> {% csrf_token %}
-              <input
-                type="text"
-                class="form-control"
-                name="title"
-                id="title"
-                value="{{temp_title}}"
-              />
-              <textarea
-                type="textarea"
-                class="form-control"
-                name="text_content"
-                id="formId1"
-                placeholder="enter in your text here...">
-              </textarea>
+              <div class="form-group text-start">
+
+				  <label for="title">Title</label>
+				  <input
+				  type="text"
+				  class="form-control m-1"
+				  name="title"
+				  id="title"
+				  value="{{temp_title}}"
+				  >
+			  </div>
+			  <div class="form-group text-start">
+
+				  <label for="posttext">Text</label>
+				  <textarea
+					type="textarea"
+					name="text_content"
+					class = 'form-control m-1'
+					id="posttext"
+					></textarea>
+			  </div>
+              
               <div class="mb-3">
-                <div for="" class="input-control">
-                  Choose file
+                <div for="" class="input-control text-start">
+                  Upload image?
                   <input
                     type="file"
-                    class="form-control"
-                    name=""
+                    class="form-control m-1"
+                    name="image"
                     id="image"
                     placeholder=""
                     aria-describedby="fileHelpId"

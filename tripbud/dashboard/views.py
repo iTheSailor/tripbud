@@ -31,18 +31,24 @@ def new_post(request):
     if request.method == 'GET':
         print("GET")
         print(request.GET)
-        temp_title= request.GET.get('q')
-        respond = HttpResponse(render(request, 'dashboard/newpost.html', temp_title))
+        temp_title= request.GET.get('title')
+        data = {
+            'temp_title': temp_title,
+        }
+        respond = HttpResponse(render(request, 'dashboard/newpost.html', data ))
         return respond
     elif request.method == 'POST':
         print("POST")
         print(request.POST)
-        temp_title = request.POST.get('title')
-        temp_content = request.POST.get('content')
-        temp_image = request.POST.get('image')
-        temp_user = request.user
-        temp_post = Post.objects.create(title=temp_title, content=temp_content, image=temp_image, user=temp_user)
-        temp_post.save()
+        post_entry = request.POST
+        data = {
+            'title' : post_entry['title'],
+            'text_content' : post_entry['text_content'],
+            'image' : post_entry['image'],
+            'author' : request.user,
+        }
+        new_post = Post.objects.create(**data)
+        new_post.save()
         respond = HttpResponse(render(request, 'dashboard/feed.html'))
         return respond
 
