@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -64,6 +65,10 @@ default_loaders = [
 ]
 cached_loaders = [("django.template.loaders.cached.Loader", default_loaders)]
 partial_loaders = [("template_partials.loader.Loader", cached_loaders)]
+
+TEMPLATE_DIRS = (
+    os.path.join( BASE_DIR / 'templates'),
+)
 
 TEMPLATES = [
     {

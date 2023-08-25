@@ -50,17 +50,20 @@ def signup_view(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             print("form is valid")
-            form.save()
+            user = form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password')
             print("username is: ", username)
-            return redirect('dashboard')
-    else:
-        messages.error(request, "Account not created")
+            #sign up user and log them in
+            login(request, user)
 
+            return redirect('home')
+        messages.error(request, "Account not created")
+    else:
         form = SignUpForm()
 
-    return render(request, '/dashboard', {'form': form})
+    # return render(request, '/registration/signup.html', {'form': form})
+    return render(request, 'registration/signup.html', {'form': form})
 
 
 

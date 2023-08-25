@@ -6,18 +6,21 @@
         <a href="{% url 'profile' %}">Profile</a>
         <a href="{% url 'dashboard' %}">Dashboard</a>
         <a href="{% url 'home' %}">Home</a>
+
     <h1 >Dashboard</h1>
         {% for post in posts %}
             <div>
                 <h2>{{ post.title }}</h2>
                 <p>{{ post.text_content }}</p>
-                <img src="{{ post.image.url }}" alt="Post Image">
+                {% if post.image %}
+                <img src="{{ post_pics/post.image }}" alt="Post Image">
+                {% endif %}
                 <p>Author: {{ post.author.username }}</p>
                 <p>Likes: {{ post.total_likes }}</p>
                 <a href="{% url 'post_detail' post_id=post.id %}">View Post</a>
-            </div>
+            </div>tripbud\post_pics\IMG_3632.jpg
         {% endfor %}
     </div>
-
+    <p>{{posts}}</p>
     
 {% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'dashboard.html' %}
+
+
+
+
+{% block content %}
+<div class="wrapper m-auto bg-light">
+
+    <div class="wrapper col-10 bg-gradient mt-5 m-auto d-flex flex-column">
+    
+        <form class="form-control-lg d-flex flex-column w-100 m-auto" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="title">Title:</label>
+            <input type="text" name="title" value={{post.title}} required><br>
+            <label for="text_content">Content:</label>
+            <textarea name="text_content" >{{post.text_content}}</textarea><br>
+            <a href="{% url 'dashboard:dashboard'%}"><button class="btn btn-warning"> Cancel Edit</button></a>
+            <button type="submit" class="btn btn-success">Create Post</button>
+
+        </form>
+    </div>
+</div>
+
+
+
+{% endblock %}
